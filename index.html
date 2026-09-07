@@ -3,95 +3,233 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alaala Book</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#8B4513">
+<title>ALAALA BOOK - 12 Albums Gallery</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Georgia,serif}
-body{background:#fdf6e3;color:#3e2723}
-#login{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;background:radial-gradient(#f5e9d4,#d7b98a)}
-#login h1{font-size:36px}
-#login input{padding:14px;width:300px;border:2px solid #8B4513;border-radius:10px;margin:12px 0}
-#login button{padding:12px 28px;background:#8B4513;color:white;border:none;border-radius:10px;font-weight:bold}
-#app{display:none}
-.bookHeader{background:#8B4513;color:#ffecb3;padding:18px;text-align:center;position:sticky;top:0;z-index:10}
-.nav{display:flex;gap:8px;overflow-x:auto;padding:12px;background:#fff8e7;border-bottom:2px solid #8B4513;position:sticky;top:68px;z-index:9}
-.nav button{white-space:nowrap;padding:8px 14px;border:1px solid #8B4513;border-radius:20px;background:white;font-weight:bold;cursor:pointer}
-.nav button.active{background:#8B4513;color:white}
-.section{padding:15px;display:none}
-.section.active{display:block}
-.tocBox{background:white;border:2px solid #8B4513;border-radius:14px;padding:16px;margin-bottom:18px}
-.tocLine{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed #d7b98a;font-size:14px}
-.albumGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.album{background:white;border-radius:12px;padding:12px;box-shadow:0 2px 6px rgba(0,0,0,0.15);border-left:5px solid #8B4513}
-.album h3{font-size:14px;color:#8B4513;margin-bottom:8px}
-.mediaItem{width:100%;background:#fdf6e3;border-radius:8px;overflow:hidden;margin-bottom:8px;border:1px solid #ddd}
-.mediaActions{display:flex;gap:6px;padding:6px}
-.mediaActions a,.mediaActions button{flex:1;text-align:center;padding:6px;font-size:12px;border-radius:6px;text-decoration:none;border:1px solid #8B4513;background:white;color:#8B4513;font-weight:bold;cursor:pointer}
-.sulatCard{background:white;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
-.addBox{background:white;border:2px dashed #8B4513;border-radius:12px;padding:14px;margin-bottom:16px}
-.addBox input,.addBox textarea,.addBox select{width:100%;padding:10px;margin:6px 0;border:1px solid #c9a87a;border-radius:8px}
-.addBox button{width:100%;padding:10px;background:#8B4513;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:6px}
-.logout{width:100%;padding:12px;background:#b71c1c;color:white;border:none;border-radius:10px;margin:20px 0;font-weight:bold}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#fdf6e3;color:#4a2c17}
+.header{background:#d35400;color:#fff;padding:12px 10px;position:sticky;top:0;z-index:10;text-align:center;border-bottom:4px solid #8B4513}
+.header h1{font-size:20px}
+.header small{font-size:11px;opacity:.9}
+.tabs{display:flex;gap:5px;padding:8px;background:#f9e4b7;overflow-x:auto;position:sticky;top:60px;z-index:9}
+.tabs button{flex:1;min-width:70px;padding:8px 5px;border:2px solid #8B4513;border-radius:20px;background:#fff;font-weight:bold;font-size:12px;cursor:pointer}
+.tabs button.active{background:#d35400;color:#fff}
+.container{padding:10px}
+.upload-box{background:#fff;border:2px dashed #8B4513;border-radius:10px;padding:12px;margin-bottom:15px}
+.upload-box select,.upload-box input{width:100%;padding:10px;margin:6px 0;border:1px solid #8B4513;border-radius:8px}
+.upload-box button{width:100%;padding:12px;background:#d35400;color:#fff;border:none;border-radius:8px;font-weight:bold;margin-top:8px;cursor:pointer}
+.album-title{font-weight:bold;margin:12px 0 6px 0;padding:8px;background:#8B4513;color:#fff;border-radius:5px;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:#fff;padding:2px;border:1px solid #d7c9a8}
+.item{aspect-ratio:1/1;overflow:hidden;background:#000;position:relative;cursor:pointer;border:1px solid #eee}
+.item img,.item video{width:100%;height:100%;object-fit:cover;display:block}
+.item.info{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent, rgba(0,0,0,0.8));color:#fff;font-size:9px;padding:20px 3px 3px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-item,.audio-item{aspect-ratio:1/1;background:#fff8e1;border:1px solid #d7c9a8;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px;text-align:center;cursor:pointer}
+.doc-item span.icon,.audio-item span.icon{font-size:28px}
+.doc-item small,.audio-item small{font-size:9px;margin-top:4px;word-break:break-word;line-height:10px}
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:100;align-items:center;justify-content:center;padding:10px;flex-direction:column}
+.modal.active{display:flex}
+.modal img,.modal video{max-width:100%;max-height:70vh;object-fit:contain}
+.modal.cap{background:#fff;padding:10px;width:100%;max-width:500px;border-radius:8px;margin-top:10px;text-align:center}
+.modal.btns{display:flex;gap:10px;width:100%;max-width:500px;margin-top:10px}
+.modal.btns button{flex:1;padding:12px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.btn-down{background:#27ae60;color:#fff}
+.btn-del{background:#c0392b;color:#fff}
+.btn-close{background:#fff;color:#333;border:1px solid #ccc!important}
+.empty{grid-column:1/-1;text-align:center;padding:20px;color:#999;font-size:12px}
 </style>
 </head>
 <body>
-<div id="login">
-<h1>📖 Alaala Book</h1>
-<p>Family Library<br>Photos • Videos • Audios • Sulat • Docs</p>
-<input type="password" id="pass" placeholder="Password: pamilya123">
-<button onclick="login()">Buksan ang Libro</button>
-<p id="err" style="color:red;display:none">Mali password boss!</p>
+<div class="header">
+<h1>📖 ALAALA BOOK</h1>
+<small>12 Albums Lahat | Photos Videos Audios Docs | Square Gallery Size</small>
 </div>
-<div id="app">
-<div class="bookHeader"><h1>📖 ALAALA BOOK</h1><p style="font-size:12px">12 Albums | Unlimited | Play & Download</p></div>
-<div class="nav">
-<button class="active" onclick="showSec('toc',this)">📑 TOC</button>
-<button onclick="showSec('photos',this)">📸 Photos</button>
-<button onclick="showSec('videos',this)">🎬 Videos</button>
-<button onclick="showSec('audios',this)">🎵 Audios</button>
-<button onclick="showSec('sulat',this)">✍️ Sulat</button>
-<button onclick="showSec('docs',this)">📄 Docs</button>
+<div class="tabs">
+<button class="active" onclick="showTab('photos')">📸 Photos</button>
+<button onclick="showTab('videos')">🎬 Videos</button>
+<button onclick="showTab('audios')">🎵 Audios</button>
+<button onclick="showTab('docs')">📄 Docs</button>
 </div>
-<div id="sec-toc" class="section active"><div class="tocBox"><h2>📑 Table of Contents</h2><div id="tocContent"></div></div><div class="tocBox"><h2>📊 Bilang</h2><div id="stats"></div></div><button class="logout" onclick="logout()">🔒 Logout</button></div>
-<div id="sec-photos" class="section">
-<div class="addBox"><h3>📸 Magdagdag Photo</h3><select id="photoAlbum"><option value="1">Album 1</option><option value="2">Album 2</option><option value="3">Album 3</option><option value="4">Album 4</option><option value="5">Album 5</option><option value="6">Album 6</option><option value="7">Album 7</option><option value="8">Album 8</option><option value="9">Album 9</option><option value="10">Album 10</option><option value="11">Album 11</option><option value="12">Album 12</option></select><input type="file" id="photoFile" accept="image/*"><input type="text" id="photoCaption" placeholder="Caption"><button onclick="addPhoto()">+ Save sa Album</button></div>
-<div class="albumGrid" id="photoAlbums"></div></div>
-<div id="sec-videos" class="section">
-<div class="addBox"><h3>🎬 Magdagdag Video</h3><select id="videoAlbum"><option value="1">Album 1</option><option value="2">Album 2</option><option value="3">Album 3</option><option value="4">Album 4</option><option value="5">Album 5</option><option value="6">Album 6</option><option value="7">Album 7</option><option value="8">Album 8</option><option value="9">Album 9</option><option value="10">Album 10</option><option value="11">Album 11</option><option value="12">Album 12</option></select><input type="file" id="videoFile" accept="video/*"><input type="text" id="videoTitle" placeholder="Title"><button onclick="addVideo()">+ Save Video</button></div>
-<div class="albumGrid" id="videoAlbums"></div></div>
-<div id="sec-audios" class="section">
-<div class="addBox"><h3>🎵 Magdagdag Audio</h3><input type="file" id="audioFile" accept="audio/*"><input type="text" id="audioTitle" placeholder="Title"><button onclick="addAudio()">+ Save Audio</button></div>
-<div id="audioList"></div></div>
-<div id="sec-sulat" class="section">
-<div class="addBox"><h3>✍️ Bagong Sulat - Diary/Poem/Quotes</h3><select id="sulatChapter"><option value="Chapter 1 - Pamilya">Chapter 1 - Pamilya</option><option value="Chapter 2 - Pag-ibig">Chapter 2 - Pag-ibig</option><option value="Chapter 3 - Pangarap">Chapter 3 - Pangarap</option><option value="Chapter 4 - Alaala">Chapter 4 - Alaala</option><option value="Chapter 5 - Dasal">Chapter 5 - Dasal</option><option value="Chapter 6 - Payo">Chapter 6 - Payo</option><option value="Custom">+ Bagong Chapter</option></select><input type="text" id="sulatCustomChapter" placeholder="Bagong Chapter name" style="display:none"><input type="text" id="sulatTitle" placeholder="Page Title"><textarea id="sulatContent" rows="8" placeholder="Isulat dito boss... unlimited pages!"></textarea><button onclick="addSulat()">+ Save Page</button></div>
-<div id="sulatList"></div></div>
-<div id="sec-docs" class="section">
-<div class="addBox"><h3>📄 Magdagdag Document</h3><input type="file" id="docFile"><input type="text" id="docTitle" placeholder="Title"><button onclick="addDoc()">+ Save Doc</button></div>
-<div id="docList"></div></div>
+<div class="container">
+<div id="tab-photos">
+<div class="upload-box">
+<select id="photoAlbum">
+<option value="1">Album 1 - Pamilya Photos</option>
+<option value="2">Album 2 - Bakasyon</option>
+<option value="3">Album 3 - Birthday</option>
+<option value="4">Album 4 - Binyag / Kasal</option>
+<option value="5">Album 5 - Graduation</option>
+<option value="6">Album 6 - Lumang Larawan</option>
+<option value="7">Album 7 - Bahay at Lugar</option>
+<option value="8">Album 8 - Kaibigan</option>
+<option value="9">Album 9 - Pagkain / Handaan</option>
+<option value="10">Album 10 - Travel</option>
+<option value="11">Album 11 - Sanggol / Baby</option>
+<option value="12">Album 12 - Iba Pa</option>
+</select>
+<input type="file" id="photoFile" accept="image/*">
+<input type="text" id="photoCaption" placeholder="Caption - pwede blanko ok lang">
+<button onclick="savePhoto()">+ Save sa Album</button>
+</div>
+<div id="photoContainer"></div>
+</div>
+<div id="tab-videos" style="display:none">
+<div class="upload-box">
+<select id="videoAlbum">
+<option value="1">Album 1 - Pamilya Videos</option>
+<option value="2">Album 2 - Bakasyon Videos</option>
+<option value="3">Album 3 - Birthday Videos</option>
+<option value="4">Album 4 - Binyag / Kasal Videos</option>
+<option value="5">Album 5 - Graduation Videos</option>
+<option value="6">Album 6 - Lumang Videos</option>
+<option value="7">Album 7 - Bahay at Lugar Videos</option>
+<option value="8">Album 8 - Kaibigan Videos</option>
+<option value="9">Album 9 - Kaganapan</option>
+<option value="10">Album 10 - Travel Videos</option>
+<option value="11">Album 11 - Baby Videos</option>
+<option value="12">Album 12 - Iba Pa Videos</option>
+</select>
+<input type="file" id="videoFile" accept="video/*">
+<input type="text" id="videoCaption" placeholder="Caption ng video - pwede blanko">
+<button onclick="saveVideo()">+ Save Video</button>
+</div>
+<div id="videoContainer"></div>
+</div>
+<div id="tab-audios" style="display:none">
+<div class="upload-box">
+<select id="audioAlbum">
+<option value="1">Album 1 - Pamilya Audio / Kwento</option>
+<option value="2">Album 2 - Kanta / Kantahan</option>
+<option value="3">Album 3 - Dasal / Prayers</option>
+<option value="4">Album 4 - Payo ni Mama / Papa</option>
+<option value="5">Album 5 - Tawanan / Kulitan</option>
+<option value="6">Album 6 - Lumang Tugtog</option>
+<option value="7">Album 7 - Birthday Songs</option>
+<option value="8">Album 8 - Voice Message</option>
+<option value="9">Album 9 - Kwento ng Buhay</option>
+<option value="10">Album 10 - Turo / Aral</option>
+<option value="11">Album 11 - Baby Voice</option>
+<option value="12">Album 12 - Iba Pa Audio</option>
+</select>
+<input type="file" id="audioFile" accept="audio/*">
+<input type="text" id="audioCaption" placeholder="Caption ng audio - pwede blanko">
+<button onclick="saveAudio()">+ Save Audio</button>
+</div>
+<div id="audioContainer"></div>
+</div>
+<div id="tab-docs" style="display:none">
+<div class="upload-box">
+<select id="docAlbum">
+<option value="1">Album 1 - Birth Certificate</option>
+<option value="2">Album 2 - Diploma / School</option>
+<option value="3">Album 3 - Marriage / Binyag</option>
+<option value="4">Album 4 - ID / Documents</option>
+<option value="5">Album 5 - Liham / Sulat</option>
+<option value="6">Album 6 - Resibo / Lumang Papel</option>
+<option value="7">Album 7 - Recipe / Luto</option>
+<option value="8">Album 8 - Titulo / Lupa</option>
+<option value="9">Album 9 - Medical / Health</option>
+<option value="10">Album 10 - Kasaysayan / Family Tree</option>
+<option value="11">Album 11 - Important Notes</option>
+<option value="12">Album 12 - Iba Pa Docs</option>
+</select>
+<input type="file" id="docFile" accept=".pdf,.doc,.docx,.txt,.jpg,.png">
+<input type="text" id="docCaption" placeholder="Caption ng document - pwede blanko">
+<button onclick="saveDoc()">+ Save Doc</button>
+</div>
+<div id="docContainer"></div>
+</div>
+</div>
+<div class="modal" id="modal">
+<img id="modalImg" style="display:none">
+<video id="modalVideo" style="display:none" controls></video>
+<audio id="modalAudio" style="display:none" controls></audio>
+<div class="cap" id="modalCap"></div>
+<div class="btns">
+<button class="btn-down" onclick="downloadCurrent()">Download</button>
+<button class="btn-del" onclick="deleteCurrent()">Delete</button>
+<button class="btn-close" onclick="closeModal()">Close</button>
+</div>
 </div>
 <script>
-const PASS="pamilya123";
-function login(){if(document.getElementById('pass').value===PASS){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';renderAll();}else{document.getElementById('err').style.display='block';}}
-function logout(){document.getElementById('app').style.display='none';document.getElementById('login').style.display='flex';document.getElementById('pass').value='';}
-function showSec(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById('sec-'+id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderAll();}
-function getList(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return []}}
-function saveList(k,l){localStorage.setItem(k,JSON.stringify(l))}
-function addPhoto(){const album=document.getElementById('photoAlbum').value;const file=document.getElementById('photoFile').files[0];const cap=document.getElementById('photoCaption').value;if(!file)return alert('Pili photo boss!');const r=new FileReader();r.onload=e=>{const list=getList('photos');list.push({id:Date.now(),album:album,src:e.target.result,caption:cap||'Alaala',date:new Date().toLocaleString()});saveList('photos',list);document.getElementById('photoFile').value='';document.getElementById('photoCaption').value='';renderPhotos();renderTOC();};r.readAsDataURL(file);}
-function renderPhotos(){const c=document.getElementById('photoAlbums');c.innerHTML='';const list=getList('photos');for(let a=1;a<=12;a++){const items=list.filter(x=>x.album==a);const div=document.createElement('div');div.className='album';div.innerHTML=`<h3>📸 Album ${a} - ${items.length}</h3><div class="mediaBox"></div>`;c.appendChild(div);const box=div.querySelector('.mediaBox');items.slice().reverse().forEach(it=>{const d=document.createElement('div');d.className='mediaItem';d.innerHTML=`<img src="${it.src}"><div style="padding:6px;font-size:12px">${it.caption} - ${it.date}</div><div class="mediaActions"><a href="${it.src}" download="photo-${it.id}.jpg">⬇️ Download</a><button onclick="delItem('photos',${it.id})">🗑️</button></div>`;box.appendChild(d);});}}
-function addVideo(){const album=document.getElementById('videoAlbum').value;const file=document.getElementById('videoFile').files[0];const title=document.getElementById('videoTitle').value;if(!file)return alert('Pili video boss!');const r=new FileReader();r.onload=e=>{const list=getList('videos');list.push({id:Date.now(),album:album,src:e.target.result,title:title||'Video',date:new Date().toLocaleString()});saveList('videos',list);document.getElementById('videoFile').value='';document.getElementById('videoTitle').value='';renderVideos();renderTOC();};r.readAsDataURL(file);}
-function renderVideos(){const c=document.getElementById('videoAlbums');c.innerHTML='';const list=getList('videos');for(let a=1;a<=12;a++){const items=list.filter(x=>x.album==a);const div=document.createElement('div');div.className='album';div.innerHTML=`<h3>🎬 Video Album ${a} - ${items.length}</h3><div class="mediaBox"></div>`;c.appendChild(div);const box=div.querySelector('.mediaBox');items.slice().reverse().forEach(it=>{const d=document.createElement('div');d.className='mediaItem';d.innerHTML=`<video controls src="${it.src}"></video><div style="padding:6px;font-size:12px">${it.title} - ${it.date}</div><div class="mediaActions"><a href="${it.src}" download="video-${it.id}.mp4">⬇️ Download</a><button onclick="delItem('videos',${it.id})">🗑️</button></div>`;box.appendChild(d);});}}
-function addAudio(){const file=document.getElementById('audioFile').files[0];const title=document.getElementById('audioTitle').value;if(!file)return alert('Pili audio boss!');const r=new FileReader();r.onload=e=>{const list=getList('audios');list.push({id:Date.now(),src:e.target.result,title:title||'Audio',date:new Date().toLocaleString()});saveList('audios',list);document.getElementById('audioFile').value='';document.getElementById('audioTitle').value='';renderAudios();renderTOC();};r.readAsDataURL(file);}
-function renderAudios(){const c=document.getElementById('audioList');c.innerHTML='';getList('audios').slice().reverse().forEach(it=>{const d=document.createElement('div');d.className='sulatCard';d.innerHTML=`<h4>🎵 ${it.title}</h4><p style="font-size:11px">${it.date}</p><audio controls style="width:100%;margin-top:8px" src="${it.src}"></audio><div class="mediaActions"><a href="${it.src}" download="audio-${it.id}.mp3">⬇️ Download</a><button onclick="delItem('audios',${it.id})">🗑️</button></div>`;c.appendChild(d);});}
-document.getElementById('sulatChapter').addEventListener('change',function(){document.getElementById('sulatCustomChapter').style.display=this.value==='Custom'?'block':'none';});
-function addSulat(){let ch=document.getElementById('sulatChapter').value;if(ch==='Custom')ch=document.getElementById('sulatCustomChapter').value||'Bagong Chapter';const title=document.getElementById('sulatTitle').value;const content=document.getElementById('sulatContent').value;if(!content)return alert('Sulatan mo muna boss!');const list=getList('sulat');list.push({id:Date.now(),chapter:ch,title:title||'Untitled',content:content,date:new Date().toLocaleString()});saveList('sulat',list);document.getElementById('sulatTitle').value='';document.getElementById('sulatContent').value='';renderSulat();renderTOC();}
-function renderSulat(){const c=document.getElementById('sulatList');c.innerHTML='';const list=getList('sulat');const grouped={};list.forEach(it=>{if(!grouped[it.chapter])grouped[it.chapter]=[];grouped[it.chapter].push(it);});Object.keys(grouped).forEach(ch=>{const h=document.createElement('div');h.className='tocBox';h.innerHTML=`<h2>📖 ${ch} - ${grouped[ch].length} pages</h2>`;c.appendChild(h);grouped[ch].slice().reverse().forEach(it=>{const d=document.createElement('div');d.className='sulatCard';d.innerHTML=`<h4>Page: ${it.title}</h4><p style="font-size:11px;color:#888">${it.date}</p><p style="white-space:pre-wrap">${it.content.replace(/</g,'&lt;')}</p><div class="mediaActions"><button onclick="downloadSulat(${it.id})">⬇️ TXT</button><button onclick="delItem('sulat',${it.id})">🗑️</button></div>`;c.appendChild(d);});});}
-function downloadSulat(id){const it=getList('sulat').find(x=>x.id===id);if(!it)return;const blob=new Blob([it.title+'\n'+it.chapter+'\n'+it.date+'\n\n'+it.content],{type:'text/plain'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=it.title+'.txt';a.click();URL.revokeObjectURL(url);}
-function addDoc(){const file=document.getElementById('docFile').files[0];const title=document.getElementById('docTitle').value;if(!file)return alert('Pili doc boss!');const r=new FileReader();r.onload=e=>{const list=getList('docs');list.push({id:Date.now(),src:e.target.result,title:title||file.name,name:file.name,date:new Date().toLocaleString()});saveList('docs',list);document.getElementById('docFile').value='';document.getElementById('docTitle').value='';renderDocs();renderTOC();};r.readAsDataURL(file);}
-function renderDocs(){const c=document.getElementById('docList');c.innerHTML='';getList('docs').slice().reverse().forEach(it=>{const d=document.createElement('div');d.className='sulatCard';d.innerHTML=`<h4>📄 ${it.title}</h4><p style="font-size:12px">${it.name} - ${it.date}</p><div class="mediaActions"><a href="${it.src}" download="${it.name}">⬇️ Download</a><button onclick="delItem('docs',${it.id})">🗑️</button></div>`;c.appendChild(d);});}
-function delItem(k,id){if(!confirm('Burahin boss?'))return;saveList(k,getList(k).filter(x=>x.id!==id));renderAll();}
-function renderTOC(){const p=getList('photos').length;const v=getList('videos').length;const a=getList('audios').length;const s=getList('sulat').length;const d=getList('docs').length;document.getElementById('tocContent').innerHTML=`<div class="tocLine"><span>📸 Photos 12 Albums</span><span>${p}</span></div><div class="tocLine"><span>🎬 Videos 12 Albums</span><span>${v}</span></div><div class="tocLine"><span>🎵 Audios</span><span>${a}</span></div><div class="tocLine"><span>✍️ Sulat Pages</span><span>${s}</span></div><div class="tocLine"><span>📄 Documents</span><span>${d}</span></div><div class="tocLine" style="font-weight:bold;border-top:2px solid #8B4513;margin-top:8px"><span>TOTAL</span><span>${p+v+a+s+d}</span></div>`;document.getElementById('stats').innerHTML=document.getElementById('tocContent').innerHTML;}
-function renderAll(){renderPhotos();renderVideos();renderAudios();renderSulat();renderDocs();renderTOC();}
+let db=[];let currentItem=null;
+try{db=JSON.parse(localStorage.getItem('alaala_v2')||'[]')}catch(e){db=[]}
+function showTab(t){
+ document.querySelectorAll('[id^=tab-]').forEach(e=>e.style.display='none');
+ document.getElementById('tab-'+t).style.display='block';
+ document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+ event.target.classList.add('active');
+ if(t==='photos')renderPhotos(); if(t==='videos')renderVideos(); if(t==='audios')renderAudios(); if(t==='docs')renderDocs();
+}
+function saveFile(input,type,albumId,caption){
+ const file=input.files[0]; if(!file){alert('Pili ka muna ng file boss!');return}
+ const reader=new FileReader();
+ reader.onload=e=>{
+   db.push({id:Date.now(),type:type,album:albumId,caption:caption||'Alaala',name:file.name,data:e.target.result,date:new Date().toLocaleString()});
+   localStorage.setItem('alaala_v2',JSON.stringify(db));
+   input.value=''; document.getElementById(type+'Caption').value='';
+   alert('Na-save na boss!'); if(type==='photo')renderPhotos(); if(type==='video')renderVideos(); if(type==='audio')renderAudios(); if(type==='doc')renderDocs();
+ }; reader.readAsDataURL(file);
+}
+function savePhoto(){saveFile(document.getElementById('photoFile'),'photo',document.getElementById('photoAlbum').value,document.getElementById('photoCaption').value)}
+function saveVideo(){saveFile(document.getElementById('videoFile'),'video',document.getElementById('videoAlbum').value,document.getElementById('videoCaption').value)}
+function saveAudio(){saveFile(document.getElementById('audioFile'),'audio',document.getElementById('audioAlbum').value,document.getElementById('audioCaption').value)}
+function saveDoc(){saveFile(document.getElementById('docFile'),'doc',document.getElementById('docAlbum').value,document.getElementById('docCaption').value)}
+function renderPhotos(){
+ const cont=document.getElementById('photoContainer'); cont.innerHTML='';
+ for(let a=1;a<=12;a++){
+   let items=db.filter(d=>d.type==='photo'&&d.album==a);
+   let title=document.createElement('div'); title.className='album-title'; title.textContent=`Album ${a} (${items.length})`;
+   cont.appendChild(title); let grid=document.createElement('div'); grid.className='grid';
+   if(items.length===0){grid.innerHTML='<div class=empty>Wala pang laman</div>'}
+   else{items.forEach(it=>{let div=document.createElement('div'); div.className='item'; div.innerHTML=`<img src="${it.data}"><div class=info>${it.caption}</div>`; div.onclick=()=>openModal(it); grid.appendChild(div);})}
+   cont.appendChild(grid);
+ }
+}
+function renderVideos(){
+ const cont=document.getElementById('videoContainer'); cont.innerHTML='';
+ for(let a=1;a<=12;a++){
+   let items=db.filter(d=>d.type==='video'&&d.album==a);
+   let title=document.createElement('div'); title.className='album-title'; title.textContent=`Album ${a} Videos (${items.length})`;
+   cont.appendChild(title); let grid=document.createElement('div'); grid.className='grid';
+   if(items.length===0){grid.innerHTML='<div class=empty>Wala pang laman</div>'}
+   else{items.forEach(it=>{let div=document.createElement('div'); div.className='item'; div.innerHTML=`<video src="${it.data}"></video><div class=info>🎬 ${it.caption}</div>`; div.onclick=()=>openModal(it); grid.appendChild(div);})}
+   cont.appendChild(grid);
+ }
+}
+function renderAudios(){
+ const cont=document.getElementById('audioContainer'); cont.innerHTML='';
+ for(let a=1;a<=12;a++){
+   let items=db.filter(d=>d.type==='audio'&&d.album==a);
+   let title=document.createElement('div'); title.className='album-title'; title.textContent=`Album ${a} Audios (${items.length})`;
+   cont.appendChild(title); let grid=document.createElement('div'); grid.className='grid';
+   if(items.length===0){grid.innerHTML='<div class=empty>Wala pang laman</div>'}
+   else{items.forEach(it=>{let div=document.createElement('div'); div.className='audio-item'; div.innerHTML=`<span class=icon>🎵</span><small>${it.caption}<br>${it.name}</small>`; div.onclick=()=>openModal(it); grid.appendChild(div);})}
+   cont.appendChild(grid);
+ }
+}
+function renderDocs(){
+ const cont=document.getElementById('docContainer'); cont.innerHTML='';
+ for(let a=1;a<=12;a++){
+   let items=db.filter(d=>d.type==='doc'&&d.album==a);
+   let title=document.createElement('div'); title.className='album-title'; title.textContent=`Album ${a} Docs (${items.length})`;
+   cont.appendChild(title); let grid=document.createElement('div'); grid.className='grid';
+   if(items.length===0){grid.innerHTML='<div class=empty>Wala pang laman</div>'}
+   else{items.forEach(it=>{let div=document.createElement('div'); div.className=it.data.startsWith('data:image')?'item':'doc-item'; div.innerHTML=it.data.startsWith('data:image')?`<img src="${it.data}"><div class=info>${it.caption}</div>`:`<span class=icon>📄</span><small>${it.caption}<br>${it.name}</small>`; div.onclick=()=>openModal(it); grid.appendChild(div);})}
+   cont.appendChild(grid);
+ }
+}
+function openModal(it){
+ currentItem=it; document.getElementById('modalImg').style.display='none'; document.getElementById('modalVideo').style.display='none'; document.getElementById('modalAudio').style.display='none';
+ if(it.type==='photo'){let el=document.getElementById('modalImg');el.src=it.data;el.style.display='block'}
+ if(it.type==='video'){let el=document.getElementById('modalVideo');el.src=it.data;el.style.display='block'}
+ if(it.type==='audio'){let el=document.getElementById('modalAudio');el.src=it.data;el.style.display='block'}
+ if(it.type==='doc'&&it.data.startsWith('data:image')){let el=document.getElementById('modalImg');el.src=it.data;el.style.display='block'}
+ document.getElementById('modalCap').textContent=it.caption+' - '+it.date+' - '+it.name;
+ document.getElementById('modal').classList.add('active');
+}
+function closeModal(){document.getElementById('modal').classList.remove('active'); document.getElementById('modalVideo').pause(); document.getElementById('modalAudio').pause(); currentItem=null}
+function downloadCurrent(){if(!currentItem)return; let a=document.createElement('a'); a.href=currentItem.data; a.download=currentItem.name; a.click();}
+function deleteCurrent(){if(!currentItem)return; if(confirm('Burahin na boss?')){db=db.filter(d=>d.id!==currentItem.id); localStorage.setItem('alaala_v2',JSON.stringify(db)); closeModal(); renderPhotos(); renderVideos(); renderAudios(); renderDocs();}}
+renderPhotos();
 </script>
 </body>
 </html>
