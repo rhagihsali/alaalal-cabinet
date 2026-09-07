@@ -1,61 +1,77 @@
 <!DOCTYPE html>
-<html lang="tl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alaala Cabinet - 110 Alaala</title>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alaala Cabinet - Book</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#2c1810;font-family:Arial,sans-serif;color:#fff;padding:15px}
-h1{text-align:center;margin:20px 0;font-size:28px;color:#ffd700;text-shadow:2px 2px 4px #000}
-.sub{text-align:center;margin-bottom:25px;opacity:0.8}
-.cabinet{background:#5d2e1f;border:10px solid #3e1e14;border-radius:15px;padding:20px;max-width:1100px;margin:0 auto;box-shadow:0 10px 30px #000}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:12px}
-.card{background:#f5e6d3;border-radius:8px;overflow:hidden;cursor:pointer;aspect-ratio:1;position:relative;border:3px solid #8b5a2b;transition:0.3s}
-.card:hover{transform:scale(1.08);border-color:#ffd700;z-index:2}
-.card img{width:100%;height:100%;object-fit:cover}
-.card span{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);font-size:10px;text-align:center;padding:3px}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:100;justify-content:center;align-items:center;flex-direction:column;padding:20px}
-.modal img{max-width:95%;max-height:80%;border:5px solid #ffd700;border-radius:10px}
-.modal p{margin-top:15px;font-size:18px;color:#ffd700}
-.close{position:absolute;top:15px;right:25px;font-size:40px;color:#fff;cursor:pointer}
-.upload-box{background:#3e1e14;padding:15px;border-radius:10px;margin-bottom:20px;text-align:center;border:2px dashed #ffd700}
-</style>
-</head>
-<body>
-<h1>🗄️ ALAALA CABINET 🗄️</h1>
-<p class="sub">110 Alaala ng Pamilya - Pindutin ang larawan para palakihin</p>
+*{box-sizing:border-box}body{margin:0;background:#1a0f08;color:#ffd700;font-family:Georgia,serif}
+#lock{position:fixed;top:0;left:0;width:100%;height:100%;background:#1a0f08;display:flex;justify-content:center;align-items:center;z-index:9999}
+.box{background:#4a2c17;padding:30px;border-radius:15px;border:3px solid gold;width:85%;max-width:320px;text-align:center}
+input{width:90%;padding:12px;margin:15px 0;border-radius:8px;border:none;text-align:center;font-size:16px}
+button{background:gold;color:#2c1810;padding:12px 25px;border:none;border-radius:8px;font-weight:bold}
+.header{text-align:center;padding:20px;background:#2c1810;border-bottom:3px solid gold}
+.toc{background:#3d2314;margin:15px;border-radius:15px;padding:20px;border:2px solid gold}
+.toc-item{background:#2c1810;margin:10px 0;padding:15px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;border-left:5px solid gold}
+.toc-item:active{background:#4a2c17}
+.section{display:none;padding:15px}
+.section.active{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:#2c1810;border-radius:10px;overflow:hidden;border:2px solid #5a3a1f;text-align:center;padding-bottom:8px}
+.card img{width:100%;height:140px;object-fit:cover}
+.btn{margin:4px;background:#333;color:gold;border:1px solid gold;padding:6px 10px;border-radius:6px;font-size:12px}
+.book-page{background:#fdf6e3;color:#2c1810;margin:15px;border-radius:10px;padding:20px;min-height:300px;box-shadow:0 5px 15px rgba(0,0,0,0.5);position:relative}
+.page-num{position:absolute;bottom:10px;right:20px;font-size:12px;color:#888}
+.nav-book{display:flex;justify-content:space-between;margin:10px 15px}
+</style></head><body>
 
-<div class="cabinet">
-<div class="upload-box">
-<p>📸 Paano maglagay ng 110 photos mo:</p>
-<p style="font-size:13px;margin-top:8px;opacity:0.9">1. Pindutin Add file > Upload files > piliin 110 photos mo<br>2. Automatic papalitan yung mga larawan dito</p>
+<div id="lock"><div class="box"><h2>🗄️ ALAALA CABINET</h2><p>Password ng Pamilya</p><input type="password" id="pass" placeholder="Ilagay password"><br><button onclick="check()">BUKSAN ANG LIBRO</button><p id="msg" style="color:#ff7777"></p></div></div>
+
+<div class="header"><h1 style="margin:5px">📖 ALAALA NG BAYAN NG CULION 📖</h1><p style="margin:0;font-style:italic">A Family Archive Book</p></div>
+
+<div id="home">
+<div class="toc"><h2 style="margin-top:0">📑 TABLE OF CONTENTS</h2>
+<div class="toc-item" onclick="openSec('photos')"><span>📸 I. Mga Larawan (Photos)</span><span>110 ></span></div>
+<div class="toc-item" onclick="openSec('videos')"><span>🎬 II. Mga Video (Videos)</span><span> > </span></div>
+<div class="toc-item" onclick="openSec('audios')"><span>🎵 III. Mga Audio (Audios)</span><span> > </span></div>
+<div class="toc-item" onclick="openSec('sulat')"><span>📜 IV. Mga Sulat (Diary & Poems)</span><span> > </span></div>
 </div>
-<div class="grid" id="grid"></div>
 </div>
 
-<div class="modal" id="modal">
-<span class="close" onclick="closeModal()">&times;</span>
-<img id="modalImg">
-<p id="modalText"></p>
+<div id="photos" class="section"><button onclick="goHome()" class="btn">⬅ Back to Contents</button><h2>📸 Mga Larawan</h2><p style="font-size:13px">Pindutin para palakihin. Pwede i-download sa ibang phone.</p><div class="grid" id="photoGrid"></div></div>
+
+<div id="videos" class="section"><button onclick="goHome()" class="btn">⬅ Back to Contents</button><h2>🎬 Mga Video</h2><div id="videoGrid"></div></div>
+
+<div id="audios" class="section"><button onclick="goHome()" class="btn">⬅ Back to Contents</button><h2>🎵 Mga Audio</h2><div id="audioGrid"></div></div>
+
+<div id="sulat" class="section"><button onclick="goHome()" class="btn">⬅ Back to Contents</button><h2>📜 Mga Sulat</h2>
+<div class="book-page" id="bookPage"><h3 id="chapterTitle">Kabanata 1</h3><p id="pageText" style="line-height:1.8;white-space:pre-line"></p><div class="page-num" id="pageNum">Page 1 / 3</div></div>
+<div class="nav-book"><button onclick="prevPage()">⬅ Nakaraan</button><button onclick="nextPage()">Susunod ➡</button></div>
 </div>
 
 <script>
-const grid=document.getElementById('grid');
-for(let i=1;i<=110;i++){
-  let card=document.createElement('div');
-  card.className='card';
-  // Gamit muna sample, pero pag nag upload ka ng 1.jpg, 2.jpg etc papalitan
-  card.innerHTML=`<img src="https://picsum.photos/200/200?random=${i}" alt="Alaala ${i}"><span>Alaala ${i}</span>`;
-  card.onclick=()=>openModal(i,card.querySelector('img').src);
-  grid.appendChild(card);
-}
-function openModal(i,src){
-  document.getElementById('modal').style.display='flex';
-  document.getElementById('modalImg').src=src;
-  document.getElementById('modalText').innerText=`Alaala #${i} - Kwento ng Pamilya`;
-}
-function closeModal(){document.getElementById('modal').style.display='none';}
-</script>
-</body>
-</html>
+function check(){ if(document.getElementById('pass').value==='Rhagih@200202'){document.getElementById('lock').style.display='none'} else {document.getElementById('msg').innerText='Mali password boss!'} }
+function openSec(id){ document.getElementById('home').style.display='none'; document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0) }
+function goHome(){ document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.getElementById('home').style.display='block' }
+
+// PHOTOS - 110
+let pGrid=document.getElementById('photoGrid');
+for(let i=1;i<=20;i++){ pGrid.innerHTML+=`<div class="card"><img src="https://picsum.photos/400/400?random=${i}" onclick="window.open(this.src)"><div style="padding:5px;font-size:12px">Alaala ${i}</div><a href="https://picsum.photos/400/400?random=${i}" download><button class="btn">⬇ Download</button></a> <button class="btn" onclick="window.open('https://picsum.photos/400/400?random=${i}')">👁 View</button></div>` }
+
+// VIDEOS - sample
+let vGrid=document.getElementById('videoGrid');
+vGrid.innerHTML=`<div class="card" style="padding:10px"><video width="100%" controls style="border-radius:8px"><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video><p>Sample Video 1 - Palitan mo ng video mo</p><a href="https://www.w3schools.com/html/mov_bbb.mp4" download><button class="btn">⬇ Download Video</button></a></div>`;
+
+// AUDIOS - sample
+let aGrid=document.getElementById('audioGrid');
+aGrid.innerHTML=`<div class="card" style="padding:15px"><p>🎵 Sample Audio - Kwento ni Lola</p><audio controls style="width:100%"><source src="https://www.w3schools.com/html/horse.mp3"></audio><br><a href="https://www.w3schools.com/html/horse.mp3" download><button class="btn">⬇ Download Audio</button></a></div>`;
+
+// SULAT - parang diary pages
+const chapters=[
+{title:"Kabanata 1: Ang Simula", text:"Noong unang panahon sa Bayan ng Culion...\n\nDito nagsimula ang lahat ng aming mga alaala. Ang pamilya na matatag, puno ng pagmamahal at pananampalataya.\n\nIsinulat noong 1960."},
+{title:"Kabanata 2: Mga Pangarap", text:"Ang bawat larawan ay may kwento.\nAng bawat ngiti ay may dahilan.\n\n'Ang pamilya ay hindi lamang dugo, kundi pagmamahal na walang hanggan.'\n\n- Lola"},
+{title:"Kabanata 3: Para sa Susunod na Henerasyon", text:"Sana itong Alaala Cabinet na ito ay magsilbing gabay...\n\nNaalala ninyo pa ba ang mga awitin natin tuwing gabi?\nAng mga kwento sa ilalim ng buwan?\n\nIto ay para sa inyo, mga anak at apo.\n\nMahal namin kayo."}
+];
+let currentPage=0;
+function showPage(){ document.getElementById('chapterTitle').innerText=chapters[currentPage].title; document.getElementById('pageText').innerText=chapters[currentPage].text; document.getElementById('pageNum').innerText=`Page ${currentPage+1} / ${chapters.length}` }
+function nextPage(){ if(currentPage<chapters.length-1){currentPage++;showPage()} }
+function prevPage(){ if(currentPage>0){currentPage--;showPage()} }
+showPage();
+</script></body></html>
