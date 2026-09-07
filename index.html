@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alaala Cabinet - 110 Alaala</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#2c1810;font-family:Arial,sans-serif;color:#fff;padding:15px}
+h1{text-align:center;margin:20px 0;font-size:28px;color:#ffd700;text-shadow:2px 2px 4px #000}
+.sub{text-align:center;margin-bottom:25px;opacity:0.8}
+.cabinet{background:#5d2e1f;border:10px solid #3e1e14;border-radius:15px;padding:20px;max-width:1100px;margin:0 auto;box-shadow:0 10px 30px #000}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:12px}
+.card{background:#f5e6d3;border-radius:8px;overflow:hidden;cursor:pointer;aspect-ratio:1;position:relative;border:3px solid #8b5a2b;transition:0.3s}
+.card:hover{transform:scale(1.08);border-color:#ffd700;z-index:2}
+.card img{width:100%;height:100%;object-fit:cover}
+.card span{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);font-size:10px;text-align:center;padding:3px}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:100;justify-content:center;align-items:center;flex-direction:column;padding:20px}
+.modal img{max-width:95%;max-height:80%;border:5px solid #ffd700;border-radius:10px}
+.modal p{margin-top:15px;font-size:18px;color:#ffd700}
+.close{position:absolute;top:15px;right:25px;font-size:40px;color:#fff;cursor:pointer}
+.upload-box{background:#3e1e14;padding:15px;border-radius:10px;margin-bottom:20px;text-align:center;border:2px dashed #ffd700}
+</style>
+</head>
+<body>
+<h1>🗄️ ALAALA CABINET 🗄️</h1>
+<p class="sub">110 Alaala ng Pamilya - Pindutin ang larawan para palakihin</p>
+
+<div class="cabinet">
+<div class="upload-box">
+<p>📸 Paano maglagay ng 110 photos mo:</p>
+<p style="font-size:13px;margin-top:8px;opacity:0.9">1. Pindutin Add file > Upload files > piliin 110 photos mo<br>2. Automatic papalitan yung mga larawan dito</p>
+</div>
+<div class="grid" id="grid"></div>
+</div>
+
+<div class="modal" id="modal">
+<span class="close" onclick="closeModal()">&times;</span>
+<img id="modalImg">
+<p id="modalText"></p>
+</div>
+
+<script>
+const grid=document.getElementById('grid');
+for(let i=1;i<=110;i++){
+  let card=document.createElement('div');
+  card.className='card';
+  // Gamit muna sample, pero pag nag upload ka ng 1.jpg, 2.jpg etc papalitan
+  card.innerHTML=`<img src="https://picsum.photos/200/200?random=${i}" alt="Alaala ${i}"><span>Alaala ${i}</span>`;
+  card.onclick=()=>openModal(i,card.querySelector('img').src);
+  grid.appendChild(card);
+}
+function openModal(i,src){
+  document.getElementById('modal').style.display='flex';
+  document.getElementById('modalImg').src=src;
+  document.getElementById('modalText').innerText=`Alaala #${i} - Kwento ng Pamilya`;
+}
+function closeModal(){document.getElementById('modal').style.display='none';}
+</script>
+</body>
+</html>
