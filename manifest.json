@@ -1,6 +1,6 @@
 {
   "name": "Alaala Cabinet Private",
-  "short_name": "Alaala",
+  "short_name": "MemoApp",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f5e6d3",
